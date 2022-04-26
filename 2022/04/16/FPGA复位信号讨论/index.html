@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>FPGA复位信号讨论 - Summer</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  
+  <meta name="description" content="复位概述复位作为电子系统中最常见的信号同时也是最重要的...">
+  <meta name="author" content="Aries">
+  <link rel="icon" href="/images/icons/a.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/b-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/nnfx-dark.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: false,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: ''
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">FPGA复位信号讨论</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/material/ " class="underline "> 资料</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li><li class="menu-item">
+        <a href="/links/ " class="underline "> 开源网站</a>
+      </li></ul>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">FPGA复位信号讨论</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>April 16, 2022</span>
+      
+        <span class="post-info-item">
+          <i class="iconfont iconeye"></i><span id="/2022/04/16/FPGA%E5%A4%8D%E4%BD%8D%E4%BF%A1%E5%8F%B7%E8%AE%A8%E8%AE%BA/" class="leancloud-counter" data-flag-title="FPGA复位信号讨论"></span>
+        </span>
+        <span class="post-info-item">
+          <i class="iconfont iconheart"></i><span id="/2022/04/16/FPGA%E5%A4%8D%E4%BD%8D%E4%BF%A1%E5%8F%B7%E8%AE%A8%E8%AE%BA/" class="leancloud-like" data-flag-title="FPGA复位信号讨论"></span>
+        </span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>4342</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h3 id="复位概述"><a href="#复位概述" class="headerlink" title="复位概述"></a>复位概述</h3><p>复位作为电子系统中最常见的信号同时也是最重要的信号，它对工程师整体的设计表现有着极大的影响。复位信号可能深刻影响设计的性能表现，功耗，面积等等。对于一个优秀的系统设计，很难不把复位信号当成一个关键信号来设计。</p>
+<p>同步的代码可能会综合出LUTs，Registers，SRLs，Block or LUT memory，DSP48 registers。对复位方式的不同选择以及对复位的使用不同会影响基本元件的选择。可能会引入更多或者更少的资源，影响整体设计的表现，功耗，甚至会导致系统运行异常。</p>
+<h3 id="什么时候什么地方使用复位？"><a href="#什么时候什么地方使用复位？" class="headerlink" title="什么时候什么地方使用复位？"></a>什么时候什么地方使用复位？</h3><p>对于很多新入门工程师来讲，很少会评估是否需要复位信号，绝大所数都是使用提供的模板，对所有的信号进行复位，尽管可能不是那么必要，如果是这样会增加资源，对复位时序也会产生影响，所以评估是否需要复位是很有必要的。</p>
+<p>对赛灵思器件而言，厂家对FPGA提供了专用的全局复位（GSR）。这个信号在配置结束会把所有的时序元件都设置为一个初始的值。如果这个初始值没有被指定，大多数情况下都会被设置为0。每个器件都会在配置结束设置为一个定值，因此，有些上电时单一目的复位必要性不是很大。下面代码初始化registers和latches的指定初始值。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Verilog代码</span></span><br><span class="line"><span class="keyword">reg</span> register1 = <span class="number">1</span>’b0; <span class="comment">// specifying regsiter1 to start as a zero</span></span><br><span class="line"><span class="keyword">reg</span> register2 = <span class="number">1</span>’b1; <span class="comment">// specifying register2 to start as a one</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] register3 = <span class="number">4</span>’b1011; <span class="comment">//specifying INIT value for 4-bit register</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- VHDL代码</span></span><br><span class="line"><span class="keyword">signal</span> reg1 : <span class="built_in">std_logic</span> := <span class="string">&#x27;0&#x27;</span>; <span class="comment">-- specifying register1 to start as a zero</span></span><br><span class="line"><span class="keyword">signal</span> reg2 : <span class="built_in">std_logic</span> := ‘<span class="number">1</span>’; <span class="comment">-- specifying register2 to start as a one</span></span><br><span class="line"><span class="keyword">signal</span> reg3 : <span class="built_in">std_logic_vector</span>(<span class="number">3</span> <span class="keyword">downto</span> <span class="number">0</span>):=<span class="string">&quot;1011&quot;</span>; <span class="comment">-- specifying INIT value for 4-bit register</span></span><br></pre></td></tr></table></figure>
+
+<p>所以像之前所诉述，工程师应该仔细考虑和评估什么时候，什么地方需要复位。因为不必要的复位可能会导致诸多的问题。限制复位的使用可能具备的优势：</p>
+<ul>
+<li><p>限制全局复位网络的扇出</p>
+</li>
+<li><p>减少复位路径的互联</p>
+</li>
+<li><p>简化复位路径的时序分析</p>
+</li>
+<li><p>提升整体设计的性能表现，面积，功耗等</p>
+</li>
+</ul>
+<p>功能性的仿真是可以容易区分复位是否需要，所以建议去评估每一个同步模块是否需要复位，尽量减少在未评估真实需要复位的情况下就引入复位。</p>
+<h3 id="同步复位异步复位"><a href="#同步复位异步复位" class="headerlink" title="同步复位异步复位"></a>同步复位异步复位</h3><p>同步复位就是复位信号在时钟触发边沿才有效，简单讲敏感列表中没有复位信号，异步复位在复位信号被置位后即有效，简单说敏感列表中存在复位信号。如下面两段Verilog代码：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同步复位</span></span><br><span class="line"><span class="keyword">module</span> sync_resetFFstyle (</span><br><span class="line"> <span class="keyword">output</span> <span class="keyword">reg</span> q,</span><br><span class="line"> <span class="keyword">input</span> d, clk, rst_n);</span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"> <span class="keyword">if</span> (!rst_n)</span><br><span class="line">     q &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line"> <span class="keyword">else</span> </span><br><span class="line">     q &lt;= d;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步复位</span></span><br><span class="line"><span class="keyword">module</span> async_resetFFstyle (</span><br><span class="line"> <span class="keyword">output</span> <span class="keyword">reg</span> q,</span><br><span class="line"> <span class="keyword">input</span> d, clk, rst_n);</span><br><span class="line"> <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n)</span><br><span class="line"> <span class="keyword">if</span> (!rst_n)</span><br><span class="line">     q &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line"> <span class="keyword">else</span> </span><br><span class="line">     q &lt;= d;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="同步复位相比较异步复位有以下的特点："><a href="#同步复位相比较异步复位有以下的特点：" class="headerlink" title="同步复位相比较异步复位有以下的特点："></a>同步复位相比较异步复位有以下的特点：</h4><ul>
+<li><p>同步复位可以映射更多种类的资源单元</p>
+</li>
+<li><p>全局的异步复位会增加设计元件的布线复杂度（每个register都要连接复位信号）</p>
+</li>
+<li><p>如果需要提高电路的集成密度或者对电路进行调优布局，同步复位更加灵活</p>
+</li>
+<li><p>有些资源仅提供提供同步复位，如DSP48和RAM模块，如果使用异步复位，很难在不影响模块功能的前提下将异步信号正确施加在这些模块。（Xilinx）</p>
+</li>
+</ul>
+<h4 id="同步复位特点："><a href="#同步复位特点：" class="headerlink" title="同步复位特点："></a>同步复位特点：</h4><ul>
+<li><p>电路是百分之百同步化的</p>
+</li>
+<li><p>时钟可以充当同步复位信号的一个毛刺滤波，但如果毛刺发生在时钟触发边沿，flip-flop仍然可能出现亚稳态。</p>
+</li>
+<li><p>同步复位可能需要一个计数器来保障复位信号的宽度足够宽来实现有效的复位。</p>
+</li>
+<li><p>因为同步复位需要时钟来复位，有些极少数的情况下，如某些低功耗设计，时钟可能在复位前就被无效，那么同步复位也无效，这里可能只有异步复位有效。</p>
+</li>
+</ul>
+<h4 id="异步复位优点"><a href="#异步复位优点" class="headerlink" title="异步复位优点"></a>异步复位优点</h4><p>只要具有可复位的触发器，那么异步复位就可以生效</p>
+<p>异步复位不会在数据路径引入其他逻辑</p>
+<h4 id="异步复位缺点"><a href="#异步复位缺点" class="headerlink" title="异步复位缺点"></a>异步复位缺点</h4><p>反断言阶段，即复位移除阶段，复位信号沿如果距离时钟触发沿很近，则可能发生亚稳态，那么复位状态可能会丢失，也就是常说的符合<code>Recovery Time</code>以及<code>Removal Time</code>（类似<code>Setup Time</code>和<code>Hold Time</code>）</p>
+<p>板子的毛刺和噪声可能引起虚假复位。</p>
+<p>其他的一些缺点已经在（同步复位相比较异步复位有以下特点）上面小节阐述。</p>
+<p>注意：异步复位都应该同步释放，以处理可能出现的亚稳态和异常情况，如下面所示代码：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步复位同步释放</span></span><br><span class="line"><span class="keyword">module</span> sync_reset #</span><br><span class="line">(</span><br><span class="line">    <span class="comment">// depth of synchronizer</span></span><br><span class="line">    <span class="keyword">parameter</span> N = <span class="number">2</span></span><br><span class="line">)</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span> clk,</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span> rst,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> out</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">(* srl_style = <span class="string">&quot;register&quot;</span> *)</span><br><span class="line"><span class="keyword">reg</span> [N-<span class="number">1</span>:<span class="number">0</span>] sync_reg = &#123;N&#123;<span class="number">1&#x27;b1</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> out = sync_reg[N-<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span> (rst) <span class="keyword">begin</span></span><br><span class="line">        sync_reg &lt;= &#123;N&#123;<span class="number">1&#x27;b1</span>&#125;&#125;;</span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        sync_reg &lt;= &#123;sync_reg[N-<span class="number">2</span>:<span class="number">0</span>], <span class="number">1&#x27;b0</span>&#125;;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br><span class="line"><span class="comment">// 代码来自开源项目AlexForencich</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="如何去除不必要复位信号？"><a href="#如何去除不必要复位信号？" class="headerlink" title="如何去除不必要复位信号？"></a>如何去除不必要复位信号？</h4><p>当需要去除一些复位信号时，直接注释掉相关的代码是不合适并且会引入非预期的结构以及会导致异常问题。如下面的代码，注释掉复位代码块里的<code>din_dly1</code>和<code>din_dly2</code>会让复位信号成为寄存器的使能信号，显然属于引入无关逻辑，可能会引起设计的问题。如图一为未注释代码前综合出的异步复位电路，图二为直接注释掉复位区域信号的代码。产生这种问题也很容易理解，代码逻辑就是非复位状态<code>din_dly1</code>和<code>din_dly2</code>才能工作。（Verilog单个时序模块不应该混合复位的触发器和不复位的触发器，VHDL也同样如此！）</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> sysclk <span class="keyword">or</span> <span class="keyword">posedge</span> rst)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(rst)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line"><span class="comment">//         din_dly1 &lt;= 8&#x27;b0;</span></span><br><span class="line"><span class="comment">//         din_dly2 &lt;= 8&#x27;b0;</span></span><br><span class="line">         da_out &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        din_dly1 &lt;= da_in;</span><br><span class="line">        din_dly2 &lt;= din_dly1;</span><br><span class="line">        da_out &lt;= din_dly2;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/%E5%9B%BE%E4%B8%80.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">图一</span></p>
+<p>图一：未注释掉复位信号的代码</p>
+<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/%E5%9B%BE%E4%BA%8C.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">图二</span></p>
+<p>图二：注释掉复位信号的代码（引入非期望的电路）</p>
+<p>当遇到需要去除一些寄存器的复位信号时，记住一个基本原则：一个时序模块不可以混合不同复位类型的寄存器，简单讲就是不能出现不复位的寄存器和复位的寄存器，只要使用复位信号，那么时序模块的寄存器都应该复位。那么需要去除一些寄存器的复位信号应该怎么办?同样功能的代码如下，将复位的寄存器放入一个<code>always</code>块中，不需要复位的寄存器放入另一个<code>always</code>块中。图三是实际综合出的电路也是实际期望的电路，没有引入其他逻辑。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> sysclk) <span class="keyword">begin</span></span><br><span class="line">    din_dly1 &lt;= da_in;</span><br><span class="line">    din_dly2 &lt;= din_dly1;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> sysclk <span class="keyword">or</span> <span class="keyword">posedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(rst)</span><br><span class="line">        da_out &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        da_out &lt;= din_dly2;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/%E5%9B%BE%E4%B8%89.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">图三</span></p>
+<p>图三：不同复位类型区分综合出的电路</p>
+<p>总结：本篇文章主要总结复位类型和其优缺点，在不同的情形下对复位类型选择进行权衡，尤其要评估一些不需要复位的情况，以实现设计的更优性能表现。具体的内容还可以查阅参考文献所列内容。</p>
+<hr>
+<p>参考文献</p>
+<p>[^1]:Asynchronous &amp; Synchronous Reset Design Techniques - Clifford E. Cummings<br>[^2]:UltraFast Design Methodology Guide for Xilinx FPGAs and SoCs - UG949<br>[^3]: OpenSource -AlexForencich</p>
+<p>为了便于大家阅读，以后亦安也会把公众号上一些文章整理成PDF发到群里，没有关注的朋友也欢迎大家关注公众号：<strong>AriesOpenFPGA</strong>，欢迎大家一起讨论FPGA和IC相关问题。</p>
+<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/qrcode_for_gh_836ef3cf8a91_258.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">qrcode_for_gh_836ef3cf8a91_258</span></p>
+
+      </section>
+      <section class="extra">
+        
+        
+        
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2022/03/28/FPGA:IC%E4%BC%98%E8%B4%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%EF%BC%88%E5%9B%9B%EF%BC%89Corundum/">FPGA/IC优质开源项目（四）Corundum<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E4%BD%8D%E6%A6%82%E8%BF%B0"><span class="toc-text">复位概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BB%80%E4%B9%88%E5%9C%B0%E6%96%B9%E4%BD%BF%E7%94%A8%E5%A4%8D%E4%BD%8D%EF%BC%9F"><span class="toc-text">什么时候什么地方使用复位？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E5%A4%8D%E4%BD%8D%E5%BC%82%E6%AD%A5%E5%A4%8D%E4%BD%8D"><span class="toc-text">同步复位异步复位</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=2577802337 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="mailto:flipped1314u@foxmail.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+    <div class="fab fab-like">
+      <i class="iconfont iconheart"></i>
+    </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+  $.getScript("//cdn.jsdelivr.net/npm/leancloud-storage@4.1.0/dist/av-min.js", () => {
+
+    AV.init({
+      appId: '',
+      appKey: '',
+      serverURLs: 'https://leancloud.cn/',
+    });
+
+    const Counter = AV.Object.extend("Counter");
+    const Like = AV.Object.extend("Like");
+
+    const showCount = (Counter) => {
+      const asyncLimit = new AsyncLimit(2);
+      $(".leancloud-counter").each(async (e) => {
+        const url = $(".leancloud-counter").eq(e).attr('id').trim();
+        const query = new AV.Query("Counter");
+        query.equalTo("words", url);
+        let count = await asyncLimit.run(() => query.count());
+        $(".leancloud-counter").eq(e).text(count ? count : 0);
+      });
+    }
+
+    const addCount = (Counter) => {
+      const url = $(".leancloud-counter").length === 1 ? $(".leancloud-counter").attr('id').trim() : 'http://example.com';
+      var query = new Counter;
+      query.save({
+        words: url
+      });
+    }
+
+    const showLike = (Like) => {
+      const asyncLimit = new AsyncLimit(2);
+      $(".leancloud-like").each(async (e) => {
+        const url = $(".leancloud-like").eq(e).attr('id').trim();
+        const query = new AV.Query("Like");
+        query.equalTo("path", url);
+        let count = await asyncLimit.run(() => query.count());
+        $(".leancloud-like").eq(e).text(count ? count : 0);
+      });
+    }
+
+    const addLike = (Like) => {
+      const url = $(".leancloud-like").length === 1 ? $(".leancloud-like").attr('id').trim() : 'http://example.com';
+      var query = new Like;
+      query.save({
+        path: url,
+        nickName: 'Anonymous'
+      });
+      $(".leancloud-like").addClass('islike');
+      $(".fab-like").children(".iconfont").removeClass("iconheart").addClass("iconheart-fill").css("color", "#eb3223");
+      ZHAOO.zui.message({ text: '爱你哦~', type: 'success' });
+      setTimeout(() => showLike(Like), 1000);
+    }
+
+    const handleLikeClick = () => {
+      const isLike = $(".leancloud-like").length === 1 && $(".leancloud-like").hasClass('islike') ? true : false;
+      if (isLike) {
+        ZHAOO.zui.message({ text: '小心心不可以收回呢~', type: 'warning' });
+      } else {
+        addLike(Like);
+      }
+    }
+
+    $(function () {
+      addCount(Counter);
+      showCount(Counter);
+      showLike(Like);
+      $(".fab-like").on("click", function () {
+        handleLikeClick();
+      });
+    });
+
+  });
+</script>
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

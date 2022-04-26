@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AXI4协议逻辑规范以及BUG处理 - Summer</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  
+  <meta name="description" content="AXI 握手协议规范以及BUG处理简介列举AXI应该遵...">
+  <meta name="author" content="Aries">
+  <link rel="icon" href="/images/icons/a.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/b-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/nnfx-dark.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: false,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: ''
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">AXI4协议逻辑规范以及BUG处理</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/material/ " class="underline "> 资料</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li><li class="menu-item">
+        <a href="/links/ " class="underline "> 开源网站</a>
+      </li></ul>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">AXI4协议逻辑规范以及BUG处理</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 25, 2022</span>
+      
+        <span class="post-info-item">
+          <i class="iconfont iconeye"></i><span id="/2022/03/25/AXI4%E5%8D%8F%E8%AE%AE%E9%80%BB%E8%BE%91%E8%A7%84%E8%8C%83%E4%BB%A5%E5%8F%8ABUG%E5%A4%84%E7%90%86/" class="leancloud-counter" data-flag-title="AXI4协议逻辑规范以及BUG处理"></span>
+        </span>
+        <span class="post-info-item">
+          <i class="iconfont iconheart"></i><span id="/2022/03/25/AXI4%E5%8D%8F%E8%AE%AE%E9%80%BB%E8%BE%91%E8%A7%84%E8%8C%83%E4%BB%A5%E5%8F%8ABUG%E5%A4%84%E7%90%86/" class="leancloud-like" data-flag-title="AXI4协议逻辑规范以及BUG处理"></span>
+        </span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>3317</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h2 id="AXI-握手协议规范以及BUG处理"><a href="#AXI-握手协议规范以及BUG处理" class="headerlink" title="AXI 握手协议规范以及BUG处理"></a>AXI 握手协议规范以及BUG处理</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>列举AXI应该遵循的逻辑规范以及一些逻辑BUG，即使是赛林丝官方的代码也要注意。</p>
+<h3 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h3><p>AXI所需要的信号并不多，比如，<code>TLAST</code>（packet最后一位数据），<code>TUSER</code>（帧开始信号）等等。我们先集中于握手信号这个概念，把握手信号分为三类：<code>TVALID</code>（有效信号，表示主机开始有效传输），<code>TREADY</code>（就绪信号，表示从机在该时钟周期准备好接收数据），以及<code>TDATA</code>（数据）。</p>
+<p>先大致了解握手信号的基础规则：</p>
+<ul>
+<li><p><code>xVALID</code>必须在复位后清除</p>
+</li>
+<li><p>总线不应该变化，除非出现<code>xVALID &amp;&amp; xREADY</code>逻辑，即数据传输必须在<code>xVALID</code> 和 <code>xREADY</code>同时置位时发生。</p>
+</li>
+<li><p><code>xVALID</code> &amp;&amp; <code>xREADY</code>逻辑期间尽量不要在此处插入其他判断逻辑以免错过握手</p>
+</li>
+<li><p>同一个时钟周期内，<code>xVALID</code>和<code>xREADY</code>可以有先后或者同时置位，若有置位先后，那么另一个信号必须保持置位直到握手完成</p>
+</li>
+<li><p>主机和从机接口间不应该有组合逻辑（标准中有表述）</p>
+</li>
+<li><p>建议规则：在总线空闲状态<code>READY</code>应该保持高逻辑</p>
+</li>
+</ul>
+<h3 id="从机逻辑示例："><a href="#从机逻辑示例：" class="headerlink" title="从机逻辑示例："></a>从机逻辑示例：</h3><ol>
+<li></li>
+</ol>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> ACLK)</span><br><span class="line">	<span class="comment">// Logic to determine S_AXIS_TREADY</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> ACLK)</span><br><span class="line">   <span class="keyword">if</span> (S_AXIS_TVALID &amp;&amp; S_AXIS_TREADY) <span class="comment">// plus nothing!（有效和准备信号下不插入其他逻辑）</span></span><br><span class="line">	<span class="comment">// Do something</span></span><br></pre></td></tr></table></figure>
+
+<p>2.出现BUG的代码（源自赛灵丝官方）：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> S_AXI_ACLK)</span><br><span class="line"><span class="keyword">if</span> (!S_AXI_ARESETN)</span><br><span class="line">	<span class="comment">// reset the circuit</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (S_AXI_AWVALID &amp;&amp; S_AXI_AWREADY &amp;&amp; something_else)</span><br><span class="line">	<span class="comment">// design is already buggy</span></span><br></pre></td></tr></table></figure>
+
+<p>3.下面代码来自Vivado2018.3示例</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @( <span class="keyword">posedge</span> S_AXI_ACLK )</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">if</span> ( S_AXI_ARESETN == <span class="number">1&#x27;b0</span> )</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">	<span class="comment">// Some reset code</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      <span class="keyword">if</span> (~axi_awready &amp;&amp; S_AXI_AWVALID &amp;&amp; ~axi_awv_awr_flag)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">          <span class="comment">// Address latching code</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (axi_wready &amp;&amp; S_AXI_WVALID &amp;&amp; something_else)</span><br><span class="line"><span class="comment">// The design is now broken</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然上面的代码示例是针对写入地址和数据通道，但它可以在任何通道上找到。 这不仅包括读地址通道，还包括写确认和读返回通道。 具体来说，在任何使用基本握手协议的设计中都经常会发现此错误。之所以这个错误常常出现，可能是因为 Xilinx的示例代码就是如此。</p>
+<p>问题在于协议本身规定总线逻辑仅取决于*<code>*VALID</code><em>和</em><code>*READY</code>*，如果两者都置位，那么不管其他条件是否有效，总线都应该进入下一个状态。而以上代码的逻辑带来的危害就是，当我们用这种逻辑去和其他设备的标准总线交互时，很容易错过事务。</p>
+<h4 id="如何避免BUG？"><a href="#如何避免BUG？" class="headerlink" title="如何避免BUG？"></a>如何避免BUG？</h4><p>把</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> S_AXI_ACLK)</span><br><span class="line"><span class="keyword">if</span> (!S_AXI_ARESETN)</span><br><span class="line">	<span class="comment">// reset the circuit</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (S_AXI_AWVALID &amp;&amp; S_AXI_AWREADY &amp;&amp; something_else)</span><br><span class="line">	<span class="comment">// design is already buggy</span></span><br></pre></td></tr></table></figure>
+
+<p>改为</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> S_AXI_ACLK)</span><br><span class="line"><span class="keyword">if</span> (!S_AXI_ARESETN)</span><br><span class="line">	<span class="comment">// reset the circuit</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (S_AXI_AWVALID &amp;&amp; S_AXI_AWREADY)</span><br><span class="line">	<span class="comment">// Design continues ...</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">always</span> @(*)</span><br><span class="line"><span class="keyword">if</span> (S_AXI_ARESETN &amp;&amp; S_AXI_AWREADY)</span><br><span class="line">	<span class="keyword">assert</span>(something_else);</span><br></pre></td></tr></table></figure>
+
+<h4 id="还有一种BUG"><a href="#还有一种BUG" class="headerlink" title="还有一种BUG"></a>还有一种BUG</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> S_AXI_ACLK)</span><br><span class="line"><span class="keyword">if</span> (!S_AXI_ARESETN)</span><br><span class="line">	<span class="comment">// Reset code</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (S_AXI_AWVALID &amp;&amp; S_AXI_AWREADY)</span><br><span class="line">	<span class="comment">// Accept a transaction</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (S_AXI_BVALID &amp;&amp; S_AXI_BREADY)</span><br><span class="line">	<span class="comment">// Code is now buggy</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>总体来讲，都是握手协议应该生效进入下一状态的时候，逻辑有可能会出现阻止它进入下状态的情况，国外有个博主详细讨论了这个不规范产生的BUG（这个大家可以见仁见智）：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="regexp">//</span>zipcpu.com<span class="regexp">/formal/</span><span class="number">2019</span><span class="regexp">/04/</span><span class="number">16</span>/axi-mistakes.html</span><br></pre></td></tr></table></figure>
+
+<h3 id="主机示例代码"><a href="#主机示例代码" class="headerlink" title="主机示例代码"></a>主机示例代码</h3><ol>
+<li></li>
+</ol>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// OPT_LOWPOWER is a parameter telling me when to force unused signals</span></span><br><span class="line"><span class="comment">// to a known value, to reduce any unnecessary signal toggling within</span></span><br><span class="line"><span class="comment">// an FPGA.</span></span><br><span class="line"><span class="keyword">parameter</span> [<span class="number">0</span>:<span class="number">0</span>] OPT_LOWPOWER = <span class="number">1&#x27;b0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> ACLK)</span><br><span class="line"><span class="keyword">if</span> (!ARESETN)</span><br><span class="line">	M_AXIS_TVALID &lt;= <span class="number">0</span>;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (!M_AXIS_TVALID || M_AXIS_TREADY)</span><br><span class="line">	M_AXIS_TVALID &lt;= next_valid_signal;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> ACLK)</span><br><span class="line"><span class="keyword">if</span> (OPT_LOWPOWER &amp;&amp; !ARESETN)</span><br><span class="line">	M_AXIS_TDATA &lt;= <span class="number">0</span>;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (!M_AXIS_TVALID || M_AXIS_TREADY)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">	M_AXIS_TDATA &lt;= next_data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (OPT_LOWPOWER &amp;&amp; !next_valid)</span><br><span class="line">		M_AXIS_TDATA &lt;= <span class="number">0</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Xilinx’s AXI stream master 模版</li>
+</ol>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assign</span>	axis_tlast = (read_pointer == NUMBER_OF_ITEMS-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span>  ACLK)</span><br><span class="line"><span class="keyword">if</span> (!ARESETN)</span><br><span class="line">	axis_tlast_delay &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	axis_tlast_delay &lt;= axis_tlast;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span>	M_AXIS_TLAST = axis_tlast_delay;</span><br></pre></td></tr></table></figure>
+
+<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/broken-tlast-trace-annotated.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">broken-tlast-trace-annotated</span></p>
+<p>如果 <code>M_AXIS_TVALID &amp;&amp; !M_AXIS_TREADY</code> 在突发长度结束的倒数第二个节拍上，则 <code>M_AXIS_TLAST</code> 将随后被置位，而通道已经因为违反协议而停止。 那么数据数量将出错，当然也不仅只会发生在AXI上，很多工程师不太注意这些细节逻辑。</p>
+<p>详细的协议本身请参阅官方提供的文件。</p>
+
+      </section>
+      <section class="extra">
+        
+        
+        
+        
+  <nav class="nav">
+    <a href="/2022/03/28/FPGA:IC%E4%BC%98%E8%B4%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%EF%BC%88%E5%9B%9B%EF%BC%89Corundum/"><i class="iconfont iconleft"></i>FPGA/IC优质开源项目（四）Corundum</a>
+    <a></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AXI-%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E8%A7%84%E8%8C%83%E4%BB%A5%E5%8F%8ABUG%E5%A4%84%E7%90%86"><span class="toc-text">AXI 握手协议规范以及BUG处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%84%E5%88%99"><span class="toc-text">规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E6%9C%BA%E9%80%BB%E8%BE%91%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-text">从机逻辑示例：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">主机示例代码</span></a></li></ol></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=2577802337 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="mailto:flipped1314u@foxmail.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+    <div class="fab fab-like">
+      <i class="iconfont iconheart"></i>
+    </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+  $.getScript("//cdn.jsdelivr.net/npm/leancloud-storage@4.1.0/dist/av-min.js", () => {
+
+    AV.init({
+      appId: '',
+      appKey: '',
+      serverURLs: 'https://leancloud.cn/',
+    });
+
+    const Counter = AV.Object.extend("Counter");
+    const Like = AV.Object.extend("Like");
+
+    const showCount = (Counter) => {
+      const asyncLimit = new AsyncLimit(2);
+      $(".leancloud-counter").each(async (e) => {
+        const url = $(".leancloud-counter").eq(e).attr('id').trim();
+        const query = new AV.Query("Counter");
+        query.equalTo("words", url);
+        let count = await asyncLimit.run(() => query.count());
+        $(".leancloud-counter").eq(e).text(count ? count : 0);
+      });
+    }
+
+    const addCount = (Counter) => {
+      const url = $(".leancloud-counter").length === 1 ? $(".leancloud-counter").attr('id').trim() : 'http://example.com';
+      var query = new Counter;
+      query.save({
+        words: url
+      });
+    }
+
+    const showLike = (Like) => {
+      const asyncLimit = new AsyncLimit(2);
+      $(".leancloud-like").each(async (e) => {
+        const url = $(".leancloud-like").eq(e).attr('id').trim();
+        const query = new AV.Query("Like");
+        query.equalTo("path", url);
+        let count = await asyncLimit.run(() => query.count());
+        $(".leancloud-like").eq(e).text(count ? count : 0);
+      });
+    }
+
+    const addLike = (Like) => {
+      const url = $(".leancloud-like").length === 1 ? $(".leancloud-like").attr('id').trim() : 'http://example.com';
+      var query = new Like;
+      query.save({
+        path: url,
+        nickName: 'Anonymous'
+      });
+      $(".leancloud-like").addClass('islike');
+      $(".fab-like").children(".iconfont").removeClass("iconheart").addClass("iconheart-fill").css("color", "#eb3223");
+      ZHAOO.zui.message({ text: '爱你哦~', type: 'success' });
+      setTimeout(() => showLike(Like), 1000);
+    }
+
+    const handleLikeClick = () => {
+      const isLike = $(".leancloud-like").length === 1 && $(".leancloud-like").hasClass('islike') ? true : false;
+      if (isLike) {
+        ZHAOO.zui.message({ text: '小心心不可以收回呢~', type: 'warning' });
+      } else {
+        addLike(Like);
+      }
+    }
+
+    $(function () {
+      addCount(Counter);
+      showCount(Counter);
+      showLike(Like);
+      $(".fab-like").on("click", function () {
+        handleLikeClick();
+      });
+    });
+
+  });
+</script>
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
