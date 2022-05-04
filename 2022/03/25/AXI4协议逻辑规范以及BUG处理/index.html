@@ -257,7 +257,7 @@
 </ol>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">assign</span>	axis_tlast = (read_pointer == NUMBER_OF_ITEMS-<span class="hljs-number">1</span>);<br><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span>  ACLK)<br><span class="hljs-keyword">if</span> (!ARESETN)<br>	axis_tlast_delay &lt;= <span class="hljs-number">1&#x27;b0</span>;<br><span class="hljs-keyword">else</span><br>	axis_tlast_delay &lt;= axis_tlast;<br><br><span class="hljs-keyword">assign</span>	M_AXIS_TLAST = axis_tlast_delay;<br></code></pre></td></tr></table></figure>
 
-<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/broken-tlast-trace-annotated.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">broken-tlast-trace-annotated</span></p>
+<p><img    class="lazyload" data-original="https://ariesfpga.oss-cn-shanghai.aliyuncs.com/Pi/broken-tlast-trace-annotated.jpeg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">broken-tlast-trace-annotated</span></p>
 <p>如果 <code>M_AXIS_TVALID &amp;&amp; !M_AXIS_TREADY</code> 在突发长度结束的倒数第二个节拍上，则 <code>M_AXIS_TLAST</code> 将随后被置位，而通道已经因为违反协议而停止。 那么数据数量将出错，当然也不仅只会发生在AXI上，很多工程师不太注意这些细节逻辑。</p>
 <p>详细的协议本身请参阅官方提供的文件。</p>
 
@@ -268,8 +268,8 @@
         
         
   <nav class="nav">
-    <a href="/2022/03/28/FPGA:IC%E4%BC%98%E8%B4%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AECorundum/"><i class="iconfont iconleft"></i>FPGA/IC开源项目Corundum</a>
-    <a></a>
+    <a href="/2022/03/26/%E8%B7%A8%E6%97%B6%E9%92%9F%E5%9F%9F%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/"><i class="iconfont iconleft"></i>跨时钟域的处理方法</a>
+    <a href="/2022/03/10/matlab2022a/">Matlab2022a发布<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>

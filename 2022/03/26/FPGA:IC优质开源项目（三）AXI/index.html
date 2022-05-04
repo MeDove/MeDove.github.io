@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>FPGA/IC优质开源项目AXI - Summer</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  
+  <meta name="description" content="上两次给大家带来以太网以及低速串口的开源项目，今天主要...">
+  <meta name="author" content="Aries">
+  <link rel="icon" href="/images/icons/a.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/b-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: false,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: ''
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">FPGA/IC优质开源项目AXI</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/material/ " class="underline "> 资料</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li><li class="menu-item">
+        <a href="/links/ " class="underline "> 开源网站</a>
+      </li></ul>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/10.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">FPGA/IC优质开源项目AXI</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 26, 2022</span>
+      
+        <span class="post-info-item">
+          <i class="iconfont iconeye"></i><span id="/2022/03/26/FPGA:IC%E4%BC%98%E8%B4%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%EF%BC%88%E4%B8%89%EF%BC%89AXI/" class="leancloud-counter" data-flag-title="FPGA/IC优质开源项目AXI"></span>
+        </span>
+        <span class="post-info-item">
+          <i class="iconfont iconheart"></i><span id="/2022/03/26/FPGA:IC%E4%BC%98%E8%B4%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%EF%BC%88%E4%B8%89%EF%BC%89AXI/" class="leancloud-like" data-flag-title="FPGA/IC优质开源项目AXI"></span>
+        </span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>5461</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <p>上两次给大家带来以太网以及低速串口的开源项目，今天主要介绍AXI的开源项目</p>
+<h2 id="Alexforencich的AXI"><a href="#Alexforencich的AXI" class="headerlink" title="Alexforencich的AXI"></a>Alexforencich的AXI</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>主要包含AXI-lite，AXI，包含crossbar以及interconnect等，完成度非常高，语言为Verilog。主要文件以及仓库地址如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs bash">rtl/arbiter.v                   : Parametrizable arbiter<br>rtl/axi_adapter.v               : AXI lite width converter<br>rtl/axi_adapter_rd.v            : AXI lite width converter (<span class="hljs-built_in">read</span>)<br>rtl/axi_adapter_wr.v            : AXI lite width converter (write)<br>rtl/axi_axil_adapter.v          : AXI to AXI lite converter<br>rtl/axi_axil_adapter_rd.v       : AXI to AXI lite converter (<span class="hljs-built_in">read</span>)<br>rtl/axi_axil_adapter_wr.v       : AXI to AXI lite converter (write)<br>rtl/axi_cdma.v                  : AXI central DMA engine<br>rtl/axi_cdma_desc_mux.v         : AXI CDMA descriptor mux<br>rtl/axi_crossbar.v              : AXI nonblocking crossbar interconnect<br>rtl/axi_crossbar_addr.v         : AXI crossbar address module<br>rtl/axi_crossbar_rd.v           : AXI crossbar interconnect (<span class="hljs-built_in">read</span>)<br>rtl/axi_crossbar_wr.v           : AXI crossbar interconnect (write)<br>rtl/axi_dma.v                   : AXI DMA engine<br>rtl/axi_dma_desc_mux.v          : AXI DMA descriptor mux<br>rtl/axi_dma_rd.v                : AXI DMA engine (<span class="hljs-built_in">read</span>)<br>rtl/axi_dma_wr.v                : AXI DMA engine (write)<br>rtl/axi_dp_ram.v                : AXI dual-port RAM<br>rtl/axi_fifo.v                  : AXI FIFO<br>rtl/axi_fifo_rd.v               : AXI FIFO (<span class="hljs-built_in">read</span>)<br>rtl/axi_fifo_wr.v               : AXI FIFO (write)<br>rtl/axi_interconnect.v          : AXI shared interconnect<br>rtl/axi_ram.v                   : AXI RAM<br>rtl/axi_ram_rd_if.v             : AXI RAM <span class="hljs-built_in">read</span> interface<br>rtl/axi_ram_wr_if.v             : AXI RAM write interface<br>rtl/axi_ram_wr_rd_if.v          : AXI RAM <span class="hljs-built_in">read</span>/write interface<br>rtl/axi_register.v              : AXI register<br>rtl/axi_register_rd.v           : AXI register (<span class="hljs-built_in">read</span>)<br>rtl/axi_register_wr.v           : AXI register (write)<br>rtl/axil_adapter.v              : AXI lite width converter<br>rtl/axil_adapter_rd.v           : AXI lite width converter (<span class="hljs-built_in">read</span>)<br>rtl/axil_adapter_wr.v           : AXI lite width converter (write)<br>rtl/axil_cdc.v                  : AXI lite CDC<br>rtl/axil_cdc_rd.v               : AXI lite CDC (<span class="hljs-built_in">read</span>)<br>rtl/axil_cdc_wr.v               : AXI lite CDC (write)<br>rtl/axil_crossbar.v             : AXI lite nonblocking crossbar interconnect<br>rtl/axil_crossbar_addr.v        : AXI lite crossbar address module<br>rtl/axil_crossbar_rd.v          : AXI lite crossbar interconnect (<span class="hljs-built_in">read</span>)<br>rtl/axil_crossbar_wr.v          : AXI lite crossbar interconnect (write)<br>rtl/axil_interconnect.v         : AXI lite shared interconnect<br>rtl/axil_ram.v                  : AXI lite RAM<br>rtl/axil_reg_if.v               : AXI lite register interface<br>rtl/axil_reg_if_rd.v            : AXI lite register interface (<span class="hljs-built_in">read</span>)<br>rtl/axil_reg_if_wr.v            : AXI lite register interface (write)<br>rtl/axil_register.v             : AXI lite register<br>rtl/axil_register_rd.v          : AXI lite register (<span class="hljs-built_in">read</span>)<br>rtl/axil_register_wr.v          : AXI lite register (write)<br>rtl/priority_encoder.v          : Parametrizable priority encoder<br></code></pre></td></tr></table></figure>
+
+<p>仓库地址：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/alexforencich/</span>verilog-axi<span class="hljs-regexp">/tree/m</span>aster/rtl<br></code></pre></td></tr></table></figure>
+
+<h2 id="Alexforencich的AXI-S"><a href="#Alexforencich的AXI-S" class="headerlink" title="Alexforencich的AXI-S"></a>Alexforencich的AXI-S</h2><p>同样来自Alexforencich，代码为AXIS，完成度相当高，语言为Verilog，不错的参考代码。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs stylus">arbiter<span class="hljs-selector-class">.v</span>                          : General-purpose parametrizable arbiter<br>axis_adapter<span class="hljs-selector-class">.v</span>                     : Parametrizable bus <span class="hljs-attribute">width</span> adapter<br>axis_arb_mux<span class="hljs-selector-class">.v</span>                     : Parametrizable arbitrated multiplexer<br>axis_async_fifo<span class="hljs-selector-class">.v</span>                  : Parametrizable asynchronous FIFO<br>axis_async_fifo_adapter<span class="hljs-selector-class">.v</span>          : FIFO/<span class="hljs-attribute">width</span> adapter wrapper<br>axis_broadcast<span class="hljs-selector-class">.v</span>                   : AXI stream broadcaster<br>axis_cobs_decode<span class="hljs-selector-class">.v</span>                 : COBS decoder<br>axis_cobs_encode<span class="hljs-selector-class">.v</span>                 : COBS encoder<br>axis_crosspoint<span class="hljs-selector-class">.v</span>                  : Parametrizable crosspoint switch<br>axis_demux<span class="hljs-selector-class">.v</span>                       : Parametrizable demultiplexer<br>axis_fifo<span class="hljs-selector-class">.v</span>                        : Parametrizable synchronous FIFO<br>axis_fifo_adapter<span class="hljs-selector-class">.v</span>                : FIFO/<span class="hljs-attribute">width</span> adapter wrapper<br>axis_frame_join<span class="hljs-selector-class">.v</span>                  : Parametrizable frame joiner<br>axis_frame_length_adjust<span class="hljs-selector-class">.v</span>         : Frame length adjuster<br>axis_frame_length_adjust_fifo<span class="hljs-selector-class">.v</span>    : Frame length adjuster with FIFO<br>axis_ll_bridge<span class="hljs-selector-class">.v</span>                   : AXI stream to LocalLink bridge<br>axis_mux<span class="hljs-selector-class">.v</span>                         : Multiplexer generator<br>axis_pipeline_fifo<span class="hljs-selector-class">.v</span>               : AXI stream register pipeline with FIFO<br>axis_pipeline_register<span class="hljs-selector-class">.v</span>           : AXI stream register pipeline<br>axis_ram_switch<span class="hljs-selector-class">.v</span>                  : AXI stream RAM switch<br>axis_rate_limit<span class="hljs-selector-class">.v</span>                  : Fractional rate limiter<br>axis_register<span class="hljs-selector-class">.v</span>                    : AXI Stream register<br>axis_srl_fifo<span class="hljs-selector-class">.v</span>                    : SRL-based FIFO<br>axis_srl_register<span class="hljs-selector-class">.v</span>                : SRL-based register<br>axis_switch<span class="hljs-selector-class">.v</span>                      : Parametrizable AXI stream switch<br>axis_stat_counter<span class="hljs-selector-class">.v</span>                : Statistics counter<br>axis_tap<span class="hljs-selector-class">.v</span>                         : AXI stream tap<br>ll_axis_bridge<span class="hljs-selector-class">.v</span>                   : LocalLink to AXI stream bridge<br>priority_encoder<span class="hljs-selector-class">.v</span>                 : Parametrizable priority encoder<br></code></pre></td></tr></table></figure>
+
+<h3 id="仓库地址："><a href="#仓库地址：" class="headerlink" title="仓库地址："></a>仓库地址：</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/alexforencich/</span>verilog-axis<br></code></pre></td></tr></table></figure>
+
+<h2 id="Pulp-platform的AXI"><a href="#Pulp-platform的AXI" class="headerlink" title="Pulp-platform的AXI"></a>Pulp-platform的AXI</h2><h3 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h3><p>完成度比较高，包含AXI Crossbar，AXI-lite，AXI-lite转AXI以及apb，语言为SystemVerilog，文档比较详细。</p>
+<h3 id="仓库地址：-1"><a href="#仓库地址：-1" class="headerlink" title="仓库地址："></a>仓库地址：</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/pulp-platform/</span>axi<br></code></pre></td></tr></table></figure>
+
+<h2 id="TVIP的AXI"><a href="#TVIP的AXI" class="headerlink" title="TVIP的AXI"></a>TVIP的AXI</h2><h3 id="介绍-2"><a href="#介绍-2" class="headerlink" title="介绍"></a>介绍</h3><p>完成度比较高，支持AXI4和AXI-lite，语言为SystemVerilog，支持Synopsys VCS和Cadence Xcelium仿真工具，具体可以参考官方。</p>
+<h3 id="仓库地址"><a href="#仓库地址" class="headerlink" title="仓库地址"></a>仓库地址</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/taichi-ishitani/</span>tvip-axi<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于优质开源代码系列，亦安每隔一段时间就会发一次，除了Github以外，大家也可以到OpenCores上面找，对于新学者来讲，还是有相当的代码是值参考的。</p>
+
+      </section>
+      <section class="extra">
+        
+        
+        
+        
+  <nav class="nav">
+    <a href="/2022/03/28/FPGA:IC%E4%BC%98%E8%B4%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AECorundum/"><i class="iconfont iconleft"></i>FPGA/IC开源项目Corundum</a>
+    <a href="/2022/03/26/%E8%B7%A8%E6%97%B6%E9%92%9F%E5%9F%9F%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/">跨时钟域的处理方法<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Alexforencich%E7%9A%84AXI"><span class="toc-text">Alexforencich的AXI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-text">介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alexforencich%E7%9A%84AXI-S"><span class="toc-text">Alexforencich的AXI-S</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80%EF%BC%9A"><span class="toc-text">仓库地址：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pulp-platform%E7%9A%84AXI"><span class="toc-text">Pulp-platform的AXI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80%EF%BC%9A-1"><span class="toc-text">仓库地址：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TVIP%E7%9A%84AXI"><span class="toc-text">TVIP的AXI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-2"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80"><span class="toc-text">仓库地址</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=2577802337 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="mailto:flipped1314u@foxmail.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+    <div class="fab fab-like">
+      <i class="iconfont iconheart"></i>
+    </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+  $.getScript("//cdn.jsdelivr.net/npm/leancloud-storage@4.1.0/dist/av-min.js", () => {
+
+    AV.init({
+      appId: '',
+      appKey: '',
+      serverURLs: 'https://leancloud.cn/',
+    });
+
+    const Counter = AV.Object.extend("Counter");
+    const Like = AV.Object.extend("Like");
+
+    const showCount = (Counter) => {
+      const asyncLimit = new AsyncLimit(2);
+      $(".leancloud-counter").each(async (e) => {
+        const url = $(".leancloud-counter").eq(e).attr('id').trim();
+        const query = new AV.Query("Counter");
+        query.equalTo("words", url);
+        let count = await asyncLimit.run(() => query.count());
+        $(".leancloud-counter").eq(e).text(count ? count : 0);
+      });
+    }
+
+    const addCount = (Counter) => {
+      const url = $(".leancloud-counter").length === 1 ? $(".leancloud-counter").attr('id').trim() : 'http://example.com';
+      var query = new Counter;
+      query.save({
+        words: url
+      });
+    }
+
+    const showLike = (Like) => {
+      const asyncLimit = new AsyncLimit(2);
+      $(".leancloud-like").each(async (e) => {
+        const url = $(".leancloud-like").eq(e).attr('id').trim();
+        const query = new AV.Query("Like");
+        query.equalTo("path", url);
+        let count = await asyncLimit.run(() => query.count());
+        $(".leancloud-like").eq(e).text(count ? count : 0);
+      });
+    }
+
+    const addLike = (Like) => {
+      const url = $(".leancloud-like").length === 1 ? $(".leancloud-like").attr('id').trim() : 'http://example.com';
+      var query = new Like;
+      query.save({
+        path: url,
+        nickName: 'Anonymous'
+      });
+      $(".leancloud-like").addClass('islike');
+      $(".fab-like").children(".iconfont").removeClass("iconheart").addClass("iconheart-fill").css("color", "#eb3223");
+      ZHAOO.zui.message({ text: '爱你哦~', type: 'success' });
+      setTimeout(() => showLike(Like), 1000);
+    }
+
+    const handleLikeClick = () => {
+      const isLike = $(".leancloud-like").length === 1 && $(".leancloud-like").hasClass('islike') ? true : false;
+      if (isLike) {
+        ZHAOO.zui.message({ text: '小心心不可以收回呢~', type: 'warning' });
+      } else {
+        addLike(Like);
+      }
+    }
+
+    $(function () {
+      addCount(Counter);
+      showCount(Counter);
+      showLike(Like);
+      $(".fab-like").on("click", function () {
+        handleLikeClick();
+      });
+    });
+
+  });
+</script>
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
